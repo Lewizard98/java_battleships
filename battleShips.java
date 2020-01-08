@@ -11,7 +11,7 @@ public class battleShips{
 	public static String intro(){
 		Scanner input = new Scanner(System.in);
 		System.out.println("Welcome to battleShips");
-		System.out.println("Current version is v0.2");
+		System.out.println("Current version is v0.3");
 		
 		System.out.print("Enter your name: ");
 		String usr = input.nextLine();
@@ -22,7 +22,8 @@ public class battleShips{
 	//The core part of the game
 	public static boolean game(String usr){
 		char[][] map = placeShips(usr);
-		char[][] compMap = compPlaceShips();
+		char[][] compShips = compPlaceShips();
+		char[][] compMap = buildMap();
 		
 		boolean win = true;
 		boolean play = true;
@@ -40,8 +41,16 @@ public class battleShips{
 			
 			if (compMap[x][y]=='X'||compMap[x][y]=='O'){
 				System.out.println("You have already attacked that location");
-			} else if (compMap[x][y]=='@'){
+				while (compMap[x][y]=='X'||compMap[x][y]=='O'){
+					System.out.println("Please enter a new location to attack...");
+					System.out.print("X(0-9): ");
+					x = input.nextInt()+1;
+					System.out.print("Y(0-9): ");
+					y = input.nextInt()+1;
+				}
+			} else if (compShips[x][y]=='@'){
 				compMap[x][y] = 'X';
+				compShips[x][y] = 'X';
 				System.out.println("HIT!");
 				enemyShips--;
 			} else {
@@ -150,16 +159,16 @@ public class battleShips{
 	
 	//computer placeing its ships
 	public static char[][] compPlaceShips(){
-		char[][] compMap = buildMap();
+		char[][] compShips = buildMap();
 		for (int i = 0; i < 5; ){
 			int compX = ((int) (Math.random()*(10 - 1))) + 1;
 			int compY = ((int) (Math.random()*(10 - 1))) + 1;
-			if (compMap[compX][compY] != '@'){
-				compMap[compX][compY] = '@';
+			if (compShips[compX][compY] != '@'){
+				compShips[compX][compY] = '@';
 				i++;
 			}
 		}
-		return compMap;
+		return compShips;
 	}
 	
 	//The final method that informs the user of victory of defeat
